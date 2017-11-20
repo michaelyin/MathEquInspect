@@ -12,14 +12,25 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-@ConfigurationProperties("tmk")
+@ConfigurationProperties("inspect")
 public class InspectConfig {
 	
-	@Value("${tmk.source.directory}")
+	@Value("${inspection.source.directory}")
 	private String srcDir;
 
-	@Value("${tmk.target.directory}")
+	@Value("${inspection.target.directory}")
 	private String targetDir;
+	
+	@Value("${inspection.image.server}")
+	private String imageServer;
+
+	public String getImageServer() {
+		return imageServer;
+	}
+
+	public void setImageServer(String imageServer) {
+		this.imageServer = imageServer;
+	}
 
 	public String getSrcDir() {
 		return srcDir;
