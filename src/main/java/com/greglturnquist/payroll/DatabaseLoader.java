@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import com.greglturnquist.payroll.config.InspectConfig;
 import com.greglturnquist.payroll.hwequation.ListDataLoader;
 
 /**
@@ -39,14 +40,19 @@ public class DatabaseLoader implements CommandLineRunner {
 		this.listLoader = listLoader;
 	}
 	
+	@Autowired
+	private InspectConfig config;
+	
 	private String prefix = "im2latex_";
-	private String httpPrefix = "http://localhost:9000/";
+	private String imageServer = "http://localhost:9000/";
 	private String PNG = ".png";
 
 	@Override
 	public void run(String... strings) throws Exception {
 		
-		String dir = "/home/michael/PycharmProjects/im2markup-prep/data/batch/";
+		//String dir = "/home/michael/PycharmProjects/im2markup-prep/data/batch/";
+		String dir = config.getSrcDir();
+		imageServer = config.getImageServer();
 		List<String> formulas = listLoader.loadListFromFile(dir + prefix + "formulas.lst");
 		List<String> trainList = listLoader.loadListFromFile(dir + prefix + "train.lst");
 		List<String> validateList = listLoader.loadListFromFile(dir + prefix + "validate.lst");
@@ -57,7 +63,7 @@ public class DatabaseLoader implements CommandLineRunner {
 			//0 - index for formula, 1 -- filename
 			int index = Integer.parseInt(strArr[0]);
 			
-			this.repository.save(new Employee(formulas.get(index), strArr[1], httpPrefix + strArr[1] + PNG));
+			this.repository.save(new Employee(formulas.get(index), strArr[1], imageServer + strArr[1] + PNG));
 		}
 /*
 		this.repository.save(new Employee("Frodo", "Baggins", "ring bearer"));
