@@ -1,3 +1,4 @@
 /target/
 /node_modules/
 /.settings/
+src/main/resources/static/build/*
