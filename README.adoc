@@ -1,3 +1,5 @@
+The original source code is from https://github.com/spring-guides/tut-react-and-spring-data-rest/tree/master/hypermedia. modify it for validating the math equation image against its ground truth.
+
 [[react-and-spring-data-rest-part-2]]
 = Part 2 - Hypermedia Controls
 :sourcedir: https://github.com/spring-guides/tut-react-and-spring-data-rest/tree/master
