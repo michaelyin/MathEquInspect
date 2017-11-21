@@ -1,5 +1,9 @@
 The original source code is from https://github.com/spring-guides/tut-react-and-spring-data-rest/tree/master/hypermedia. modify it for validating the math equation image against its ground truth.
 
+Here is the demo UI.
+
+image::https://github.com/michaelyin/MathEquInspect/blob/master/images/Selection_860.png[]
+
 [[react-and-spring-data-rest-part-2]]
 = Part 2 - Hypermedia Controls
 :sourcedir: https://github.com/spring-guides/tut-react-and-spring-data-rest/tree/master
