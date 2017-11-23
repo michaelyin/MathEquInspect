@@ -19,6 +19,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.Data;
 
@@ -28,6 +29,7 @@ import lombok.Data;
 // tag::code[]
 @Data
 @Entity
+@Table(name="equation")
 public class Employee {
 
 	private @Id @GeneratedValue Long id;
