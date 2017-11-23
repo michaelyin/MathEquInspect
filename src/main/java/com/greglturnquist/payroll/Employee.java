@@ -15,6 +15,7 @@
  */
 package com.greglturnquist.payroll;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -30,8 +31,14 @@ import lombok.Data;
 public class Employee {
 
 	private @Id @GeneratedValue Long id;
+	
+	@Column(name = "latex", nullable = false)
 	private String firstName;
+	
+	@Column(name = "file_name", nullable = false)
 	private String lastName;
+	
+	@Column(name = "image_name", nullable = false)
 	private String description;
 
 	private Employee() {}
