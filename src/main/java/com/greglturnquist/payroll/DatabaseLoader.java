@@ -63,7 +63,7 @@ public class DatabaseLoader implements CommandLineRunner {
 			//0 - index for formula, 1 -- filename
 			int index = Integer.parseInt(strArr[0]);
 			
-			this.repository.save(new Employee(formulas.get(index), strArr[1], imageServer + strArr[1] + PNG));
+			this.repository.save(new Employee("$" + formulas.get(index) + "$", strArr[1], imageServer + strArr[1] + PNG));
 		}
 /*
 		this.repository.save(new Employee("Frodo", "Baggins", "ring bearer"));
