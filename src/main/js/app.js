@@ -1,7 +1,12 @@
 'use strict';
 
 const React = require('react');
-const ReactDOM = require('react-dom')
+const ReactDOM = require('react-dom');
+//const ReactKaTeX = require('react-katex')
+var Latex = require('react-latex');
+
+
+
 const client = require('./client');
 
 const follow = require('./follow'); // function to hop multiple links by "rel"
@@ -238,16 +243,18 @@ class EmployeeList extends React.Component {
 		return (
 			<div>
 				<div>
-				<label font='bold' title="change number of record shown in one page">Number of records shown per page: </label>
+				<label title="change number of record shown in one page">Number of records shown per page: </label>
 				</div>
 				<input ref="pageSize" defaultValue={this.props.pageSize} onInput={this.handleInput}/>
 				<table>
 					<tbody>
 						<tr>
 							<th>Latex</th>
+							<th>latex display</th>
 							<th>File Name</th>
 							<th>image</th>
-							<th></th>
+							<th>verified</th>
+							<th> delete </th>
 						</tr>
 						{employees}
 					</tbody>
@@ -277,8 +284,10 @@ class Employee extends React.Component {
 		return (
 			<tr>
 				<td>{this.props.employee.firstName}</td>
+				<td><Latex>{this.props.employee.firstName}</Latex></td>
 				<td>{this.props.employee.lastName}</td>
 				<td><img src={this.props.employee.description} height="38"/></td>
+				<td><input type="checkbox"  checked={this.props.employee.verified}  /></td>
 				<td>
 					<button onClick={this.handleDelete}>Delete</button>
 				</td>
