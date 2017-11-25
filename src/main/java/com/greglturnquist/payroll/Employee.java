@@ -15,6 +15,8 @@
  */
 package com.greglturnquist.payroll;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,13 +44,24 @@ public class Employee {
 	
 	@Column(name = "image_name", nullable = false)
 	private String description;
+	
+	@Column(name = "create_t", nullable = false)
+	private Date createT;
+	
+	@Column(name = "modify_t")
+	private Date modifyT;
+	
+	@Column(name = "verified")
+	private boolean isVerified = false;
 
+	@SuppressWarnings("unused")
 	private Employee() {}
 
 	public Employee(String firstName, String lastName, String description) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.description = description;
+		this.createT = new Date();
 	}
 }
 // end::code[]
