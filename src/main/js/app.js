@@ -29,7 +29,7 @@ class App extends React.Component {
 	// tag::follow-2[]
 	loadFromServer(pageSize) {
 		follow(client, root, [
-			{rel: 'employees', params: {size: pageSize}}]
+			{rel: 'employees', params: {size: pageSize, page: 2}}]
 		).then(employeeCollection => {
 			return client({
 				method: 'GET',
