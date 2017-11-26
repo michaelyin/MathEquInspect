@@ -21,6 +21,7 @@ class App extends React.Component {
 		this.state = {employees: [], attributes: [], pageSize: 10, links: {}};
 		this.updatePageSize = this.updatePageSize.bind(this);
 		this.onCreate = this.onCreate.bind(this);
+		this.onUpdate = this.onUpdate.bind(this);
 		this.onDelete = this.onDelete.bind(this);
 		this.onNavigate = this.onNavigate.bind(this);
 	}
@@ -79,6 +80,27 @@ class App extends React.Component {
 		});
 	}
 	// end::create[]
+	
+	//tag::update[]
+	onUpdate(employee, updatedEmployee) {
+		client({
+			method: 'PUT',
+			path: employee.entity._links.self.href,
+			entity: updatedEmployee,
+			headers: {
+				'Content-Type': 'application/json',
+				'If-Match': employee.headers.Etag
+			}
+		}).done(response => {
+			this.loadFromServer(this.state.pageSize);
+		}, response => {
+			if (response.status.code === 412) {
+				alert('DENIED: Unable to update ' +
+					employee.entity._links.self.href + '. Your copy is stale.');
+			}
+		});
+	}
+	// end::update[]
 
 	// tag::delete[]
 	onDelete(employee) {
@@ -136,7 +158,9 @@ class App extends React.Component {
 				<EmployeeList employees={this.state.employees}
 							  links={this.state.links}
 							  pageSize={this.state.pageSize}
+							  attributes={this.state.attributes}
 							  onNavigate={this.onNavigate}
+							  onUpdate={this.onUpdate}
 							  onDelete={this.onDelete}
 							  updatePageSize={this.updatePageSize}/>
 			</div>
@@ -196,8 +220,61 @@ class CreateDialog extends React.Component {
 		)
 	}
 
-}
+};
 // end::create-dialog[]
+
+//tag::update-dialog
+class UpdateDialog extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+
+	handleSubmit(e) {
+		e.preventDefault();
+		var updatedEmployee = {};
+		this.props.attributes.forEach(attribute => {
+			updatedEmployee[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
+		});
+		this.props.onUpdate(this.props.employee, updatedEmployee);
+		window.location = "#";
+	}
+
+	render() {
+		var inputs = this.props.attributes.map(attribute =>
+				<p key={this.props.employee.entity[attribute]}>
+					<input type="text" placeholder={attribute}
+						   defaultValue={this.props.employee.entity[attribute]}
+						   ref={attribute} className="field" />
+				</p>
+		);
+
+		var dialogId = "updateEmployee-" + this.props.employee.entity._links.self.href;
+
+		return (
+			<div key={this.props.employee.entity._links.self.href}>
+				<a href={"#" + dialogId}>Update</a>
+				<div id={dialogId} className="modalDialog">
+					<div>
+						<a href="#" title="Close" className="close">X</a>
+
+						<h2>Update an Equation</h2>
+
+						<form>
+							{inputs}
+							<button onClick={this.handleSubmit}>Edit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+};
+//end::update-dialog
+
+
 
 class EmployeeList extends React.Component {
 
@@ -251,6 +328,7 @@ class EmployeeList extends React.Component {
 			<Employee key={employee.entity._links.self.href}
 							 employee={employee} 
 							 attributes={this.props.attributes}
+							 onUpdate={this.props.onUpdate}
 							 onDelete={this.props.onDelete}/>
 		);
 
@@ -282,6 +360,7 @@ class EmployeeList extends React.Component {
 							<th>File Name</th>
 							<th>image</th>
 							<th>verified</th>
+							<th></th>
 							<th> delete </th>
 						</tr>
 						{employees}
@@ -316,6 +395,11 @@ class Employee extends React.Component {
 				<td>{this.props.employee.entity.lastName}</td>
 				<td><img src={this.props.employee.entity.description} height="38"/></td>
 				<td><input type="checkbox"  checked={this.props.employee.entity.verified}  /></td>
+				<td>
+					<UpdateDialog employee={this.props.employee}
+								  attributes={this.props.attributes}
+								  onUpdate={this.props.onUpdate}/>
+				</td>
 				<td>
 					<button onClick={this.handleDelete}>Delete</button>
 				</td>
