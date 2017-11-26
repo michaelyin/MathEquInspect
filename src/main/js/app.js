@@ -104,8 +104,12 @@ class App extends React.Component {
 
 	// tag::delete[]
 	onDelete(employee) {
-		client({method: 'DELETE', path: employee.entity._links.self.href}).done(response => {
+		client({
+			method: 'DELETE', 
+			path: employee.entity._links.self.href
+		}).done(response => {
 			this.loadFromServer(this.state.pageSize);
+			//this.onNavigate('http://localhost:8080/api/employees?page=100&size=10');
 		});
 	}
 	// end::delete[]
@@ -203,7 +207,7 @@ class CreateDialog extends React.Component {
 		return (
 			<div>
 				
-
+				<a href="#createEmployee">Create</a>
 				<div id="createEmployee" className="modalDialog">
 					<div>
 						<a href="#" title="Close" className="close">X</a>
@@ -263,7 +267,7 @@ class UpdateDialog extends React.Component {
 
 						<form>
 							{inputs}
-							<button onClick={this.handleSubmit}>Edit</button>
+							<button onClick={this.handleSubmit}>Update</button>
 						</form>
 					</div>
 				</div>
@@ -335,15 +339,23 @@ class EmployeeList extends React.Component {
 		var navLinks = [];
 		if ("first" in this.props.links) {
 			navLinks.push(<button key="first" onClick={this.handleNavFirst}>&lt;&lt;</button>);
+		}else{//disabled
+			navLinks.push(<button key="first" disabled>&lt;&lt;</button>);
 		}
 		if ("prev" in this.props.links) {
 			navLinks.push(<button key="prev" onClick={this.handleNavPrev}>&lt;</button>);
+		}else{
+			navLinks.push(<button key="prev" disabled>&lt;</button>);
 		}
 		if ("next" in this.props.links) {
 			navLinks.push(<button key="next" onClick={this.handleNavNext}>&gt;</button>);
+		}else{
+			navLinks.push(<button key="next" disabled>&gt;</button>);
 		}
 		if ("last" in this.props.links) {
 			navLinks.push(<button key="last" onClick={this.handleNavLast}>&gt;&gt;</button>);
+		}else{
+			navLinks.push(<button key="last" disabled>&gt;&gt;</button>);
 		}
 
 		return (
