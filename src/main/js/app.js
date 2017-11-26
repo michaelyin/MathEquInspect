@@ -4,6 +4,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 //const ReactKaTeX = require('react-katex')
 var Latex = require('react-latex');
+const when = require('when');
 
 
 
@@ -35,14 +36,24 @@ class App extends React.Component {
 				headers: {'Accept': 'application/schema+json'}
 			}).then(schema => {
 				this.schema = schema.entity;
+				this.links = employeeCollection.entity._links;
 				return employeeCollection;
 			});
-		}).done(employeeCollection => {
+		}).then(employeeCollection => {
+				return employeeCollection.entity._embedded.employees.map(employee =>
+							client({
+									method: 'GET',
+									path: employee._links.self.href
+							})
+				);
+		}).then(employeePromises => {
+				return when.all(employeePromises);
+		}).done(employees => {
 			this.setState({
-				employees: employeeCollection.entity._embedded.employees,
+				employees: employees,
 				attributes: Object.keys(this.schema.properties),
 				pageSize: pageSize,
-				links: employeeCollection.entity._links});
+				links: this.links});
 		});
 	}
 	// end::follow-2[]
@@ -71,7 +82,7 @@ class App extends React.Component {
 
 	// tag::delete[]
 	onDelete(employee) {
-		client({method: 'DELETE', path: employee._links.self.href}).done(response => {
+		client({method: 'DELETE', path: employee.entity._links.self.href}).done(response => {
 			this.loadFromServer(this.state.pageSize);
 		});
 	}
@@ -79,12 +90,26 @@ class App extends React.Component {
 
 	// tag::navigate[]
 	onNavigate(navUri) {
-		client({method: 'GET', path: navUri}).done(employeeCollection => {
+		client({
+				method: 'GET', 
+				path: navUri
+		}).then(employeeCollection => {
+				this.links = employeeCollection.entity._links;
+				
+				return employeeCollection.entity._embedded.employees.map(employee =>
+							client({
+									method: 'GET',
+									path: employee._links.self.href
+							})
+				);
+		}).then(employeePromises => {
+				return when.all(employeePromises);
+		}).done(employees => {
 			this.setState({
-				employees: employeeCollection.entity._embedded.employees,
-				attributes: this.state.attributes,
+				employees: employees,
+				attributes: Object.keys(this.schema.properties),
 				pageSize: this.state.pageSize,
-				links: employeeCollection.entity._links
+				links: this.links
 			});
 		});
 	}
@@ -223,7 +248,10 @@ class EmployeeList extends React.Component {
 	// tag::employee-list-render[]
 	render() {
 		var employees = this.props.employees.map(employee =>
-			<Employee key={employee._links.self.href} employee={employee} onDelete={this.props.onDelete}/>
+			<Employee key={employee.entity._links.self.href}
+							 employee={employee} 
+							 attributes={this.props.attributes}
+							 onDelete={this.props.onDelete}/>
 		);
 
 		var navLinks = [];
@@ -283,11 +311,11 @@ class Employee extends React.Component {
 	render() {
 		return (
 			<tr>
-				<td>{this.props.employee.firstName}</td>
-				<td><Latex>{this.props.employee.firstName}</Latex></td>
-				<td>{this.props.employee.lastName}</td>
-				<td><img src={this.props.employee.description} height="38"/></td>
-				<td><input type="checkbox"  checked={this.props.employee.verified}  /></td>
+				<td>{this.props.employee.entity.firstName}</td>
+				<td><Latex>{this.props.employee.entity.firstName}</Latex></td>
+				<td>{this.props.employee.entity.lastName}</td>
+				<td><img src={this.props.employee.entity.description} height="38"/></td>
+				<td><input type="checkbox"  checked={this.props.employee.entity.verified}  /></td>
 				<td>
 					<button onClick={this.handleDelete}>Delete</button>
 				</td>
