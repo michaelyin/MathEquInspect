@@ -58,21 +58,19 @@ public class DatabaseLoader implements CommandLineRunner {
 		List<String> validateList = listLoader.loadListFromFile(dir + prefix + "validate.lst");
 		List<String> testList = listLoader.loadListFromFile(dir + prefix + "test.lst");
 		
-		for(String record:testList) {
+		this.persistList(testList, formulas);
+		this.persistList(trainList, formulas);
+		this.persistList(validateList, formulas);
+	}
+	
+	private void persistList(List<String> list, List<String> formulas) {
+		for(String record:list) {
 			String[] strArr = record.split(" ");
 			//0 - index for formula, 1 -- filename
 			int index = Integer.parseInt(strArr[0]);
 			
 			this.repository.save(new Employee("$" + formulas.get(index) + "$", strArr[1], strArr[1] + PNG));
 		}
-/*
-		this.repository.save(new Employee("Frodo", "Baggins", "ring bearer"));
-		this.repository.save(new Employee("Bilbo", "Baggins", "burglar"));
-		this.repository.save(new Employee("Gandalf", "the Grey", "wizard"));
-		this.repository.save(new Employee("Samwise", "Gamgee", "gardener"));
-		this.repository.save(new Employee("Meriadoc", "Brandybuck", "pony rider"));
-		this.repository.save(new Employee("Peregrin", "Took", "pipe smoker"));
-		*/
 	}
 	
 	
