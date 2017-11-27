@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.greglturnquist.payroll;
+package net.wyun.hwe.inspection;
 
 import java.util.List;
 
@@ -21,8 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import com.greglturnquist.payroll.config.InspectConfig;
-import com.greglturnquist.payroll.hwequation.ListDataLoader;
+import net.wyun.hwe.inspection.config.InspectConfig;
+import net.wyun.hwe.inspection.hwequation.ListDataLoader;
 
 /**
  * @author Greg Turnquist

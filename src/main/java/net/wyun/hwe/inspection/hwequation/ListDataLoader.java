@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.greglturnquist.payroll.hwequation;
+package net.wyun.hwe.inspection.hwequation;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

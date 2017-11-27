@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.greglturnquist.payroll.config;
+package net.wyun.hwe.inspection.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

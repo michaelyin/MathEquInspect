@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.greglturnquist.payroll;
+package net.wyun.hwe.inspection;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.greglturnquist.payroll.config.InspectConfig;
+import net.wyun.hwe.inspection.config.InspectConfig;
 
 /**
  * @author michael
