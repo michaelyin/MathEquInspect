@@ -98,7 +98,7 @@ class App extends React.Component {
 	
 	//tag::update[]
 	onUpdate(employee, updatedEmployee) {
-		updatedEmployee['verified']='true';
+		//updatedEmployee['verified']='true';
 		client({
 			method: 'PUT',
 			path: employee.entity._links.self.href,
