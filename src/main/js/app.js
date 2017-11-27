@@ -18,7 +18,7 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {employees: [], attributes: [], pageSize: 10, links: {}};
+		this.state = {employees: [], attributes: [], pageSize: 10, curPage: 0, totalPages: 100, links: {}};
 		this.updatePageSize = this.updatePageSize.bind(this);
 		this.onCreate = this.onCreate.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
@@ -27,10 +27,13 @@ class App extends React.Component {
 	}
 
 	// tag::follow-2[]
-	loadFromServer(pageSize) {
+	loadFromServer(pageSize, curPage) {
 		follow(client, root, [
-			{rel: 'employees', params: {size: pageSize, page: 2}}]
+			{rel: 'employees', params: {size: pageSize, page: curPage}}]
 		).then(employeeCollection => {
+			console.log(employeeCollection);
+			this.curPage = employeeCollection.entity.page['number'];
+			this.totalPages = employeeCollection.entity.page['totalPages'];
 			return client({
 				method: 'GET',
 				path: employeeCollection.entity._links.profile.href,
@@ -54,6 +57,8 @@ class App extends React.Component {
 				employees: employees,
 				attributes: Object.keys(this.schema.properties),
 				pageSize: pageSize,
+				curPage: this.curPage,
+				totalPages: this.totalPages,
 				links: this.links});
 		});
 	}
@@ -92,7 +97,7 @@ class App extends React.Component {
 				'If-Match': employee.headers.Etag
 			}
 		}).done(response => {
-			this.loadFromServer(this.state.pageSize);
+			this.loadFromServer(this.state.pageSize, this.state.curPage);
 		}, response => {
 			if (response.status.code === 412) {
 				alert('DENIED: Unable to update ' +
@@ -108,7 +113,7 @@ class App extends React.Component {
 			method: 'DELETE', 
 			path: employee.entity._links.self.href
 		}).done(response => {
-			this.loadFromServer(this.state.pageSize);
+			this.loadFromServer(this.state.pageSize, this.state.curPage);
 			//this.onNavigate('http://localhost:8080/api/employees?page=100&size=10');
 		});
 	}
@@ -121,7 +126,8 @@ class App extends React.Component {
 				path: navUri
 		}).then(employeeCollection => {
 				this.links = employeeCollection.entity._links;
-				
+				this.curPage = employeeCollection.entity.page['number'];
+				this.totalPages = employeeCollection.entity.page['totalPages'];
 				return employeeCollection.entity._embedded.employees.map(employee =>
 							client({
 									method: 'GET',
@@ -135,6 +141,8 @@ class App extends React.Component {
 				employees: employees,
 				attributes: Object.keys(this.schema.properties),
 				pageSize: this.state.pageSize,
+				curPage: this.curPage,
+				totalPages: this.totalPages,
 				links: this.links
 			});
 		});
@@ -144,24 +152,25 @@ class App extends React.Component {
 	// tag::update-page-size[]
 	updatePageSize(pageSize) {
 		if (pageSize !== this.state.pageSize) {
-			this.loadFromServer(pageSize);
+			this.loadFromServer(pageSize, 0);
 		}
 	}
 	// end::update-page-size[]
 
 	// tag::follow-1[]
 	componentDidMount() {
-		this.loadFromServer(this.state.pageSize);
+		this.loadFromServer(this.state.pageSize, 0);
 	}
 	// end::follow-1[]
 
 	render() {
 		return (
 			<div>
-				<CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
 				<EmployeeList employees={this.state.employees}
 							  links={this.state.links}
 							  pageSize={this.state.pageSize}
+							  curPage={this.state.curPage}
+							  totalPages={this.state.totalPages}
 							  attributes={this.state.attributes}
 							  onNavigate={this.onNavigate}
 							  onUpdate={this.onUpdate}
@@ -380,6 +389,8 @@ class EmployeeList extends React.Component {
 				</table>
 				<div>
 					{navLinks}
+					current page: <input ref="curPage" value={this.props.curPage + 1} />
+					total pages: <input ref="totalPages" value={this.props.totalPages} />
 				</div>
 			</div>
 		)
