@@ -2,3 +2,5 @@
 /node_modules/
 /.settings/
 src/main/resources/static/built
+/src/main/resources/static/build/bundle.js
+/src/main/resources/static/build/bundle.js.map
