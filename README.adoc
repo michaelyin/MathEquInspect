@@ -19,5 +19,14 @@ npm install --save react-latex
 3. to package for deployment  
 ./mvnw package
 
-4. DB record
+4. DB records check
+
 image::https://github.com/michaelyin/MathEquInspect/blob/master/images/db.png[]
+
+5. record before update
+
+image::https://github.com/michaelyin/MathEquInspect/blob/master/images/before.png[]
+
+6. record after update
+
+image::https://github.com/michaelyin/MathEquInspect/blob/master/images/after.png[]
