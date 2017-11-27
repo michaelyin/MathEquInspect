@@ -6,10 +6,18 @@ Here is the demo UI.
 
 image::https://github.com/michaelyin/MathEquInspect/blob/master/images/Selection_860.png[]
 
-1. dependencies:
+1. dependencies  
 
 need install react-latex for latex display.
 https://github.com/zzish/react-latex
 
 npm install --save react-latex
 
+2. to run the application  
+./mvnw clean spring-boot:run
+
+3. to package for deployment  
+./mvnw package
+
+4. DB record
+image::https://github.com/michaelyin/MathEquInspect/blob/master/images/db.png[]
