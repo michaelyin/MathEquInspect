@@ -13,7 +13,7 @@ const client = require('./client');
 const follow = require('./follow'); // function to hop multiple links by "rel"
 
 const root = '/api';
-const imageServer = 'http://localhost:9000/';
+var imageServer = 'http://localhost:7000/';
 
 class App extends React.Component {
 
@@ -26,6 +26,14 @@ class App extends React.Component {
 		this.onDelete = this.onDelete.bind(this);
 		this.onNavigate = this.onNavigate.bind(this);
 		this.handleToPageInput = this.handleToPageInput.bind(this);
+	}
+	
+	getImageServer(){
+		var tempPath = '/imageserver';
+		return client({
+			method: 'GET',
+			path: tempPath,
+		});
 	}
 
 	// tag::follow-2[]
@@ -175,7 +183,12 @@ class App extends React.Component {
 
 	// tag::follow-1[]
 	componentDidMount() {
-		this.loadFromServer(this.state.pageSize, 0);
+		this.getImageServer().done(response =>{
+			imageServer = response.entity['imageserver'];	
+			console.log(imageServer);	
+			this.loadFromServer(this.state.pageSize, 0);
+		});
+		
 	}
 	// end::follow-1[]
 
