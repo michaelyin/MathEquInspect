@@ -24,6 +24,7 @@ class App extends React.Component {
 		this.onCreate = this.onCreate.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
 		this.onDelete = this.onDelete.bind(this);
+		this.onVerify = this.onVerify.bind(this);
 		this.onNavigate = this.onNavigate.bind(this);
 		this.handleToPageInput = this.handleToPageInput.bind(this);
 	}
@@ -129,6 +130,14 @@ class App extends React.Component {
 		});
 	}
 	// end::delete[]
+	
+	// tag::verify click
+	onVerify(employee) {
+		var updatedEmployee = JSON.parse(JSON.stringify(employee.entity))
+		var prevState = updatedEmployee['verified'];
+		updatedEmployee['verified'] = !prevState;
+		this.onUpdate(employee, updatedEmployee);
+	}
 
 	// tag::navigate[]
 	onNavigate(navUri) {
@@ -208,6 +217,7 @@ class App extends React.Component {
 							  onNavigate={this.onNavigate}
 							  onUpdate={this.onUpdate}
 							  onDelete={this.onDelete}
+							  onVerify={this.onVerify}
 							  updatePageSize={this.updatePageSize}/>
 			</div>
 		)
@@ -375,6 +385,7 @@ class EmployeeList extends React.Component {
 							 employee={employee} 
 							 attributes={this.props.attributes}
 							 onUpdate={this.props.onUpdate}
+							 onVerify={this.props.onVerify}
 							 onDelete={this.props.onDelete}/>
 		);
 
@@ -435,10 +446,15 @@ class Employee extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleDelete = this.handleDelete.bind(this);
+		this.handleVerify = this.handleVerify.bind(this);
 	}
 
 	handleDelete() {
 		this.props.onDelete(this.props.employee);
+	}
+	
+	handleVerify(){
+		this.props.onVerify(this.props.employee);
 	}
 
 	render() {
@@ -448,7 +464,7 @@ class Employee extends React.Component {
 				<td><Latex>{this.props.employee.entity.firstName}</Latex></td>
 				<td>{this.props.employee.entity.lastName}</td>
 				<td><img src={imageServer + this.props.employee.entity.description} height="38"/></td>
-				<td><input type="checkbox"  checked={this.props.employee.entity.verified}  /></td>
+				<td><input type="checkbox"  checked={this.props.employee.entity.verified}  onClick={this.handleVerify}/></td>
 				<td>
 					<UpdateDialog employee={this.props.employee}
 								  attributes={this.props.attributes}
