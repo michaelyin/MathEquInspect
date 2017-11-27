@@ -13,6 +13,7 @@ const client = require('./client');
 const follow = require('./follow'); // function to hop multiple links by "rel"
 
 const root = '/api';
+const imageServer = 'http://localhost:9000/';
 
 class App extends React.Component {
 
@@ -24,6 +25,7 @@ class App extends React.Component {
 		this.onUpdate = this.onUpdate.bind(this);
 		this.onDelete = this.onDelete.bind(this);
 		this.onNavigate = this.onNavigate.bind(this);
+		this.handleToPageInput = this.handleToPageInput.bind(this);
 	}
 
 	// tag::follow-2[]
@@ -156,6 +158,19 @@ class App extends React.Component {
 		}
 	}
 	// end::update-page-size[]
+	
+	// tag::handle-to-page-updates[]
+	handleToPageInput(e) {
+		e.preventDefault();
+		var toPage = ReactDOM.findDOMNode(this.refs.toPage).value;
+		if (/^[0-9]+$/.test(toPage) && toPage !== this.state.curPage) {
+			this.loadFromServer(this.state.pageSize, toPage -1)
+		} else {
+			ReactDOM.findDOMNode(this.refs.toPage).value =
+				toPage.substring(0, toPage.length - 1);
+		}
+	}
+	// end::handle-t0-page-updates[]
 
 	// tag::follow-1[]
 	componentDidMount() {
@@ -165,7 +180,11 @@ class App extends React.Component {
 
 	render() {
 		return (
+			
 			<div>
+				<div>
+					Go to <input ref="toPage" defaultValue='0' onInput={this.handleToPageInput}/> page
+				</div>
 				<EmployeeList employees={this.state.employees}
 							  links={this.state.links}
 							  pageSize={this.state.pageSize}
@@ -369,10 +388,8 @@ class EmployeeList extends React.Component {
 
 		return (
 			<div>
-				<div>
-				<label title="change number of record shown in one page">Number of records shown per page: </label>
-				</div>
-				<input ref="pageSize" defaultValue={this.props.pageSize} onInput={this.handleInput}/>
+				<br/>
+				<input ref="pageSize" defaultValue={this.props.pageSize} onInput={this.handleInput}/> records per page
 				<table>
 					<tbody>
 						<tr>
@@ -416,7 +433,7 @@ class Employee extends React.Component {
 				<td>{this.props.employee.entity.firstName}</td>
 				<td><Latex>{this.props.employee.entity.firstName}</Latex></td>
 				<td>{this.props.employee.entity.lastName}</td>
-				<td><img src={this.props.employee.entity.description} height="38"/></td>
+				<td><img src={imageServer + this.props.employee.entity.description} height="38"/></td>
 				<td><input type="checkbox"  checked={this.props.employee.entity.verified}  /></td>
 				<td>
 					<UpdateDialog employee={this.props.employee}
