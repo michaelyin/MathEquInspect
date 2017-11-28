@@ -463,7 +463,7 @@ class Employee extends React.Component {
 				<td>{this.props.employee.entity.firstName}</td>
 				<td><Latex>{this.props.employee.entity.firstName}</Latex></td>
 				<td>{this.props.employee.entity.lastName}</td>
-				<td><img src={imageServer + this.props.employee.entity.description} height="38"/></td>
+				<td><img src={imageServer + this.props.employee.entity.description} height="57"/></td>
 				<td><input type="checkbox"  checked={this.props.employee.entity.verified}  onClick={this.handleVerify}/></td>
 				<td>
 					<UpdateDialog employee={this.props.employee}
