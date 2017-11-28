@@ -7,6 +7,6 @@ CREATE TABLE `equation` (
   `file_name` varchar(255) NOT NULL,
   `modify_t` datetime DEFAULT NULL,
   `version` bigint(20) DEFAULT NULL,
-  UNIQUE ('file_name'),
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `file_name` (`file_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
