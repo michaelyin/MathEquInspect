@@ -1,0 +1,12 @@
+#set up sboot user for mathinspect on ubuntu production server
+
+1)  run 'adduser --system --no-create-home --disabled-password --disabled-login --group sboot' to add an user for wms.  user sboot, and group sboot
+
+2)  run 'cd /opt'.
+3)  run 'chown -R sboot:sboot mathinspect/'.
+4)  in /opt/wms, configure wyun_svc.sh to set the APP_HOME to /opt/mathinspect
+5)  run 'chmod +x /opt/mathinspect/mathinspect_svc.sh' to have it executable.
+6)  
+   a. sudo ln -sf /opt/mathinspect/mathinspect_svc.sh /etc/init.d/mathinspect_svc
+   b. run 'update-rc.d mathinspect_svc defaults' for mathinspect_svc run-level settings.
+   
