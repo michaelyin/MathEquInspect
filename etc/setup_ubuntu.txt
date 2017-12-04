@@ -16,4 +16,4 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 9001
 
 sudo apt-get install iptables-persistent
 
-sudo invoke-rc.d iptables-persistent save
+sudo invoke-rc.d iptables-persistent save (not working?)
