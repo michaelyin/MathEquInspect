@@ -4,9 +4,16 @@
 
 2)  run 'cd /opt'.
 3)  run 'chown -R sboot:sboot mathinspect/'.
-4)  in /opt/wms, configure wyun_svc.sh to set the APP_HOME to /opt/mathinspect
+4)  in /opt/wms, configure mathinspect_svc.sh to set the APP_HOME to /opt/mathinspect
 5)  run 'chmod +x /opt/mathinspect/mathinspect_svc.sh' to have it executable.
 6)  
    a. sudo ln -sf /opt/mathinspect/mathinspect_svc.sh /etc/init.d/mathinspect_svc
    b. run 'update-rc.d mathinspect_svc defaults' for mathinspect_svc run-level settings.
    
+#route 80 traffic to 9001 (Ubuntu 16.04)
+
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 9001
+
+sudo apt-get install iptables-persistent
+
+sudo invoke-rc.d iptables-persistent save
