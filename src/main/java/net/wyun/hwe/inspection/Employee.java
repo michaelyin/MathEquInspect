@@ -23,6 +23,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -40,12 +41,15 @@ public class Employee {
 	private @Id @GeneratedValue Long id;
 	
 	@Column(name = "latex", nullable = false)
+	@Size(min=1)
 	private String firstName;
 	
 	@Column(name = "file_name", nullable = false)
+	@Size(min=1)
 	private String lastName;
 	
 	@Column(name = "image_name", nullable = false)
+	@Size(min=1)
 	private String description;
 	
 	@Column(name = "create_t", nullable = false)
