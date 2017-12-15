@@ -299,11 +299,12 @@ class UpdateDialog extends React.Component {
 
 	render() {
 		var placeholder_map = {'firstName':'latex', 'lastName':'file name', 'description':'image file', 'createT':'create time', 'verified':'verified', 'modifyT':'modify time'};
+		var readonly_map = {'firstName':'', 'lastName':'readonly', 'description':'readonly', 'createT':'readonly', 'verified':'readonly', 'modifyT':'readonly'};
 		var inputs = this.props.attributes.map(attribute =>
 				<p key={this.props.employee.entity[attribute]}>
 					<input type="text" placeholder={placeholder_map[attribute]}
 						   defaultValue={this.props.employee.entity[attribute]}
-						   ref={attribute} className="field" />
+						   ref={attribute} className="field" readOnly={readonly_map[attribute]}/>
 				</p>
 		);
 
