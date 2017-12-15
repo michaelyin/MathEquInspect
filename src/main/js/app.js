@@ -3,7 +3,7 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 //const ReactKaTeX = require('react-katex')
-var Latex = require('react-latex');
+const Latex = require('react-latex');
 const when = require('when');
 
 
@@ -28,7 +28,7 @@ class App extends React.Component {
 		this.onNavigate = this.onNavigate.bind(this);
 		this.handleToPageInput = this.handleToPageInput.bind(this);
 	}
-	
+
 	getImageServer(){
 		var tempPath = '/imageserver';
 		return client({
@@ -96,7 +96,7 @@ class App extends React.Component {
 		});
 	}
 	// end::create[]
-	
+
 	//tag::update[]
 	onUpdate(employee, updatedEmployee) {
 		//updatedEmployee['verified']='true';
@@ -122,7 +122,7 @@ class App extends React.Component {
 	// tag::delete[]
 	onDelete(employee) {
 		client({
-			method: 'DELETE', 
+			method: 'DELETE',
 			path: employee.entity._links.self.href
 		}).done(response => {
 			this.loadFromServer(this.state.pageSize, this.state.curPage);
@@ -130,7 +130,7 @@ class App extends React.Component {
 		});
 	}
 	// end::delete[]
-	
+
 	// tag::verify click
 	onVerify(employee) {
 		var updatedEmployee = JSON.parse(JSON.stringify(employee.entity))
@@ -142,7 +142,7 @@ class App extends React.Component {
 	// tag::navigate[]
 	onNavigate(navUri) {
 		client({
-				method: 'GET', 
+				method: 'GET',
 				path: navUri
 		}).then(employeeCollection => {
 				this.links = employeeCollection.entity._links;
@@ -176,7 +176,7 @@ class App extends React.Component {
 		}
 	}
 	// end::update-page-size[]
-	
+
 	// tag::handle-to-page-updates[]
 	handleToPageInput(e) {
 		e.preventDefault();
@@ -193,17 +193,17 @@ class App extends React.Component {
 	// tag::follow-1[]
 	componentDidMount() {
 		this.getImageServer().done(response =>{
-			imageServer = response.entity['imageserver'];	
-			console.log(imageServer);	
+			imageServer = response.entity['imageserver'];
+			console.log(imageServer);
 			this.loadFromServer(this.state.pageSize, 0);
 		});
-		
+
 	}
 	// end::follow-1[]
 
 	render() {
 		return (
-			
+
 			<div>
 				<div>
 					Go to <input ref="toPage" defaultValue='0' onInput={this.handleToPageInput}/> page
@@ -258,7 +258,7 @@ class CreateDialog extends React.Component {
 
 		return (
 			<div>
-				
+
 				<a href="#createEmployee">Create</a>
 				<div id="createEmployee" className="modalDialog">
 					<div>
@@ -298,9 +298,10 @@ class UpdateDialog extends React.Component {
 	}
 
 	render() {
+		var placeholder_map = {'firstName':'latex', 'lastName':'file name', 'description':'image file', 'createT':'create time', 'verified':'verified', 'modifyT':'modify time'};
 		var inputs = this.props.attributes.map(attribute =>
 				<p key={this.props.employee.entity[attribute]}>
-					<input type="text" placeholder={attribute}
+					<input type="text" placeholder={placeholder_map[attribute]}
 						   defaultValue={this.props.employee.entity[attribute]}
 						   ref={attribute} className="field" />
 				</p>
@@ -382,7 +383,7 @@ class EmployeeList extends React.Component {
 	render() {
 		var employees = this.props.employees.map(employee =>
 			<Employee key={employee.entity._links.self.href}
-							 employee={employee} 
+							 employee={employee}
 							 attributes={this.props.attributes}
 							 onUpdate={this.props.onUpdate}
 							 onVerify={this.props.onVerify}
@@ -452,7 +453,7 @@ class Employee extends React.Component {
 	handleDelete() {
 		this.props.onDelete(this.props.employee);
 	}
-	
+
 	handleVerify(){
 		this.props.onVerify(this.props.employee);
 	}
