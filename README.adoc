@@ -12,6 +12,10 @@ need install react-latex for latex display.
 https://github.com/zzish/react-latex
   
 npm install --save react-latex  
+
+Want to see your JavaScript changes automatically? Run   
+    npm run-script watch   
+to put webpack into watch mode. It will regenerate bundle.js as you edit the source.  
   
 #2. to run the application  
 
