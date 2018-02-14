@@ -1,1 +1,3 @@
 delete from equation where bin(verified) = 0;
+
+Feb. 13, 2018: on aws tokyo server, verified equation data are backed in equation_v table.
